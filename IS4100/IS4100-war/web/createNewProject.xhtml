@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <div>
+            <h1> Create New Project</h1>
+            <h:form>
+                
+                <p:panelGrid columns="3" style="width: 100%; height: auto" columnClasses="ui-g-3, ui-g-5, ui-g-4" layout="grid">
+                    <p:outputLabel style="font-weight: bold" value="Project Name: " />
+                    <p:inputText style="width: 80%"  value="#{projectManagedBean.newProjectEntity.projectName}" />
+                    <p:column>&nbsp;</p:column>
+                    
+                    <h:outputLabel style="font-weight: bold" value="Start Date: " />
+                    <p:datePicker id="inline" value="#{projectManagedBean.newProjectEntity.startDate}"/>
+                    <p:column>&nbsp;</p:column>
+                    
+                    <h:outputLabel style="font-weight: bold" value="End Date: " />
+                    <p:datePicker id="inline1" value="#{projectManagedBean.newProjectEntity.endDate}" />
+                    <p:column>&nbsp;</p:column>
+                    
+                    <h:outputLabel style="font-weight: bold" value="Description: " />
+                    <p:inputText style="width: 80%"  value="#{projectManagedBean.newProjectEntity.description}" />
+                    <p:column>&nbsp;</p:column>
+                    
+                    <h:outputLabel style="font-weight: bold" value="Budget: " />
+                    <p:inputText style="width: 80%"  value="#{projectManagedBean.newProjectEntity.budget}" />
+                    <p:column>&nbsp;</p:column>
+                    
+                    <h:inputHidden value="currentUserEntity" >
+                        <f:attribute name="userId" value="#{projectManagedBean.userId}"/>
+                    </h:inputHidden>
+                    
+                    <p:commandButton value="Create" type="submit" actionListener="#{projectManagedBean.createNewProject}" style="margin-right:20px;" styleClass="ui-priority-primary" />
+                    
+                            
+                </p:panelGrid>
+            </h:form>
+        </div>
+            
+    </ui:define>
+
+</ui:composition>
+

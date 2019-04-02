@@ -1,0 +1,27 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 24 Mar, 2019, 1:29:58 AM
+    Author     : shawn
+*/
+
+.headerBox {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.staffPortalHeading {
+    font-weight: bold;
+    font-size: 3vw;
+    color: white;
+    width: 100%;
+}
+
+#logo {
+    height: 100%;
+    margin-right: -3.5vw;
+}

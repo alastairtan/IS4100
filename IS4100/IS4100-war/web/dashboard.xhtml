@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <style type="text/css">
+        .ui-panel, div.ui-state-hover {
+                margin: 10px;
+                width: 95%;
+        }
+        .ui-dashboard-column {
+                width: 33%;
+        }
+        .myTable td {
+            width: 10px;
+        }
+        </style>
+        
+        <div>
+            <h:form>
+                <p:dataTable value="#{projectManagedBean.retrieveListOfProjects(currentUserEntity.userId)}" var="projectEntity"
+                             rows="10" paginator="true" 
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,20"
+                             >
+
+                    <f:facet name="header"> All Project(s) </f:facet>
+
+                    <p:column headerText="Project ID" sortBy="#{projectEntity.projectId}" filterBy="#{projectEntity.projectId}" filterMatchMode="contains">
+                        <h:outputText value="#{projectEntity.projectId}" />
+                    </p:column>    
+                    
+                    <p:column headerText="Project Name" sortBy="#{projectEntity.projectName}" filterBy="#{projectEntity.projectName}" filterMatchMode="contains">
+                        <h:outputText value="#{projectEntity.projectName}" />
+                    </p:column>
+                    
+                    <p:column headerText="Start Date" sortBy="#{projectEntity.startDate}" filterBy="#{projectEntity.startDate}" filterMatchMode="contains">
+                        <h:outputText value="#{projectEntity.startDate}" />
+                    </p:column>
+                    
+                    <p:column headerText="End Date" sortBy="#{projectEntity.endDate}" filterBy="#{projectEntity.endDate}" filterMatchMode="contains">
+                        <h:outputText value="#{projectEntity.endDate}" />
+                    </p:column>
+                    
+                    <p:column headerText="Budget"  >
+                        <h:outputText value="#{projectEntity.budget}" />
+                    </p:column>
+                    
+                    <p:column headerText="Current Amount Spent" >
+                        <h:outputText value="#{projectEntity.currentSpent}" />
+                    </p:column>
+     
+                    
+                    <p:column headerText="More Info">
+                        <p:commandButton icon="fa fa-fw fa-edit" action="#{projectManagedBean.navigate('viewCurrentProject', projectEntity.projectId)}">
+                            <f:param name="projectEntityToView" value="#{projectManagedBean.projectEntityToView}"/>
+                        </p:commandButton>
+                        
+                        
+                    
+                        <p:commandButton update="formViewProject" oncomplete="PF('dialogViewProject').show()" icon="ui-icon-document" title="View">
+                            <f:setPropertyActionListener value="#{projectEntity}" target="#{projectManagedBean.projectEntityToView}" />
+                        </p:commandButton>
+                        
+                        <p:commandButton icon="ui-icon-pencil" oncomplete="PF('dialogCreateNewTask').show()" title="Update" update="formCreateNewTask">
+                            <f:setPropertyActionListener value="#{projectEntity}" target="#{projectManagedBean.projectEntityToView}" />
+                        </p:commandButton>
+                        
+                        
+                    </p:column>
+                    
+                    
+                </p:dataTable>
+
+                <div style="clear:both" />
+            </h:form>
+            
+            
+            <h:form id="formViewProject">
+            
+            <p:dialog id="dialogViewProject" widgetVar="dialogViewProject" header="View Project" closable="true">
+
+                <p:panelGrid>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Project ID: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{projectManagedBean.projectEntityToView.projectId}" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                
+                <p:dataTable id="allTaskDataTable" value="#{projectManagedBean.projectEntityToView.taskEntitys}" var="taskEntity" styleClass="myTable">
+                    <p:column headerText="Id">
+                        <h:outputText value="#{taskEntity.taskId}" />
+                    </p:column>
+
+                    <p:column headerText="Points">
+                        <h:outputText value="#{taskEntity.points}" />
+                    </p:column>
+
+                    <p:column headerText="Task Budget">
+                        <h:outputText value="#{taskEntity.taskBudget}" />
+                    </p:column>
+                </p:dataTable>
+            </p:dialog>
+        </h:form>
+            
+            
+                <h:form id="formCreateNewTask">
+            
+            <p:dialog id="dialogCreateNewTask" widgetVar="dialogCreateNewTask" header="Create New Task" closable="true">
+                
+                <p:messages id="messagesCreateNewTask" for="cmdSend"  redisplay="false" showDetail="true" />
+                
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Project ID: #{projectEntity.projectId} " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="currentProj" value="#{projectManagedBean.projectEntityToView.projectId}"/>
+                        </p:column>
+                        
+                    </p:row>
+                    
+                    
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="points" value="Points: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="points" value="#{projectManagedBean.taskEntityToCreate.points}" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="points" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="taskBudget" value="Task Budget: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="taskBudget" value="#{projectManagedBean.taskEntityToCreate.taskBudget}" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="taskBudget" />
+                        </p:column>
+                    </p:row>
+                    
+                    
+                    
+                   
+                    
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton type="reset" value="Clear" />&nbsp;
+                            <p:commandButton id="cmdSend" value="Create New Task" type="submit" actionListener="#{projectManagedBean.createNewTask}" update=" messagesCreateNewTask" oncomplete="PF('dialogCreateNewTask').show();"/> 
+                          
+                        </p:column>
+                    </p:row>
+                    
+                </p:panelGrid>
+
+            </p:dialog>
+            
+        </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>
+

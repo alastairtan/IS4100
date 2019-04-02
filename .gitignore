@@ -1,0 +1,15 @@
+*.jar
+*.war
+*.ear
+*.log
+*.class
+/IS4100/nbproject/private/
+/IS4100/build/
+/IS4100/dist/
+/IS4100/IS4100-ejb/nbproject/private/
+/IS4100/IS4100-ejb/build/
+/IS4100/IS4100-ejb/dist/
+/IS4100/IS4100-war/nbproject/private/
+/IS4100/IS4100-war/build/
+/IS4100/IS4100-war/dist/
+

@@ -1,0 +1,36 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 23 Mar, 2019, 5:00:58 PM
+    Author     : shawn
+*/
+
+html{
+    height: 100%;
+}
+body {
+    background: linear-gradient(180deg,transparent,#000),url(https://ak5.picdn.net/shutterstock/videos/15634885/thumb/1.jpg);
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100%;
+    overflow: hidden;
+}
+
+.brand {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 3.5rem;
+    font-weight: 300;
+    margin-bottom: -0.5vw;
+    margin-top: 0vw;
+    color: white;
+}
+
+.inputField {
+    width: 80%;
+}
+
