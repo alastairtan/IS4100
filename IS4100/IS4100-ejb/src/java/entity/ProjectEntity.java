@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
@@ -15,7 +16,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -35,12 +35,117 @@ public class ProjectEntity implements Serializable {
     private String description;
     private BigDecimal budget;
     private BigDecimal currentSpent;
+    private double pointsCompleted;
+    private double totalPoints;
+    private double pointsPercentageCompleted;
+    private double percentageBudgetSpent;
+    private double cpi;
+    private double spi;
+    private int daysPassed;
+    private int totalDays;
+    private Date currentDate;
+    private int remainingSprints;
+    
+    public ProjectEntity() {
+        budget = BigDecimal.ZERO;
+        currentSpent = BigDecimal.ZERO;
+        pointsCompleted = 0;
+        totalPoints = 0;
+        pointsPercentageCompleted = 0;
+        percentageBudgetSpent = 0;
+        cpi=0;
+        spi=0;
+        daysPassed = 0;
+        totalDays = 0;
+        currentDate = new Date();
+        remainingSprints = 0;
+    }
     
     @OneToMany(mappedBy = "projectEntity")
     private List<TaskEntity> taskEntitys;
     
     @ManyToOne
     private UserEntity userEntity;
+
+    public double getTotalPoints() {
+        return totalPoints;
+    }
+
+    public int getTotalDays() {
+        return totalDays;
+    }
+
+    public Date getCurrentDate() {
+        return currentDate;
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
+    }
+
+    public void setTotalDays(int totalDays) {
+        this.totalDays = totalDays;
+    }
+
+    public int getRemainingSprints() {
+        return remainingSprints;
+    }
+
+    public void setRemainingSprints(int remainingSprints) {
+        this.remainingSprints = remainingSprints;
+    }
+
+    public double getCpi() {
+        return cpi;
+    }
+
+    public void setCpi(double cpi) {
+        this.cpi = cpi;
+    }
+
+    public double getSpi() {
+        return spi;
+    }
+
+    public int getDaysPassed() {
+        return daysPassed;
+    }
+
+    public void setDaysPassed(int daysPassed) {
+        this.daysPassed = daysPassed;
+    }
+
+    public void setSpi(double spi) {
+        this.spi = spi;
+    }
+
+    public double getPercentageBudgetSpent() {
+        return percentageBudgetSpent;
+    }
+
+    public void setPercentageBudgetSpent(double percentageBudgetSpent) {
+        this.percentageBudgetSpent = percentageBudgetSpent;
+    }
+
+    public double getPointsPercentageCompleted() {
+        return pointsPercentageCompleted;
+    }
+
+    public void setPointsPercentageCompleted(double pointsPercentageCompleted) {
+        this.pointsPercentageCompleted = pointsPercentageCompleted;
+    }
+
+    public void setTotalPoints(double totalPoints) {
+        this.totalPoints = totalPoints;
+    }
+
+    public double getPointsCompleted() {
+        return pointsCompleted;
+    }
+
+    public void setPointsCompleted(double pointsCompleted) {
+        this.pointsCompleted = pointsCompleted;
+    }
 
     public UserEntity getUserEntity() {
         return userEntity;

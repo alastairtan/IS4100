@@ -33,11 +33,30 @@ public class TaskEntity implements Serializable {
     
     private BigDecimal spent;
     
-    private int points;
+    private double points;
+    
+    private double pointsCompleted;
 
+    private boolean isOverBudget;
     
     @ManyToOne
     private ProjectEntity projectEntity;
+
+    public TaskEntity() {
+        taskBudget = BigDecimal.ZERO;
+        spent = BigDecimal.ZERO;
+        pointsCompleted = 0;
+        points = 0;
+        isOverBudget = false;
+    }
+
+    public boolean isIsOverBudget() {
+        return isOverBudget;
+    }
+
+    public void setIsOverBudget(boolean isOverBudget) {
+        this.isOverBudget = isOverBudget;
+    }
 
     public boolean isCompleted() {
         return completed;
@@ -63,11 +82,11 @@ public class TaskEntity implements Serializable {
         this.spent = spent;
     }
 
-    public int getPoints() {
+    public double getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(double points) {
         this.points = points;
     }
 
@@ -86,6 +105,14 @@ public class TaskEntity implements Serializable {
 
     public void setTaskId(Long taskId) {
         this.taskId = taskId;
+    }
+
+    public double getPointsCompleted() {
+        return pointsCompleted;
+    }
+
+    public void setPointsCompleted(double pointsCompleted) {
+        this.pointsCompleted = pointsCompleted;
     }
 
     @Override

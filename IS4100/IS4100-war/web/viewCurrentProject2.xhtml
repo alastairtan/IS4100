@@ -15,9 +15,6 @@
         .ui-dashboard-column {
                 width: 33%;
         }
-        .colourRow {
-                background: pink;
-        }
         </style>
         
         <div class="ui-g">
@@ -41,35 +38,21 @@
 
                                 <h:outputText value="End Date: " />
                                 <h:outputText value="#{projectManagedBean.projectEntityToView.endDate}" />
-                                
-                                <h:outputText value="Project Total Points: " />
-                                <h:outputText value="#{projectManagedBean.projectEntityToView.totalPoints}" />
-                                
-                                <h:outputText value="Project Points Completed: " />
-                                <h:outputText value="#{projectManagedBean.projectEntityToView.pointsCompleted}" />
-                                
+
                                 <h:outputText value="Budget: " />
                                 <h:outputText value="#{projectManagedBean.projectEntityToView.budget}" />
 
                                 <h:outputText value="Amount Spent: " />
-                                <h:outputText value="#{projectManagedBean.projectEntityToView.currentSpent}" >
-                                    <f:convertNumber pattern="#0.00" />
-                                </h:outputText>
+                                <h:outputText value="#{projectManagedBean.projectEntityToView.currentSpent}" />
 
                             </p:panelGrid>
                         </div>
                         <div class="ui-g-3 ui-md-8">
-                            <div class="ui-g-3 ui-md-6">
-                                <h3>Project Progress Bar</h3>
-                                <p:progressBar id="projectProgressBar" value="#{projectManagedBean.projectEntityToView.pointsPercentageCompleted}" labelTemplate="{value}%" displayOnly="true"/>
-                                <h3>CPI</h3>
-                                <p:outputLabel value="#{projectManagedBean.projectEntityToView.cpi}"/>
+                            <div class="ui-g-3 ui-md-4">
+                                lorem ipsum
                             </div>
-                            <div class="ui-g-3 ui-md-6">
-                                <h3>Project Budget Bar</h3>
-                                <p:progressBar id="projectBudgetBar" value="#{projectManagedBean.projectEntityToView.percentageBudgetSpent}" labelTemplate="{value}%" displayOnly="true"/>
-                                <h3>Remaining Sprints</h3>
-                                <p:outputLabel value="#{projectManagedBean.projectEntityToView.remainingSprints}"/>
+                            <div class="ui-g-3 ui-md-8">
+                                asdf
                             </div>
                             
                         </div>
@@ -80,7 +63,7 @@
                 <p:dataTable id="dataTableAllTasks" value="#{projectManagedBean.projectEntityToView.taskEntitys}" var="taskEntity"
                              rows="10" paginator="true" 
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="10,15,20" rowStyleClass="#{taskEntity.isOverBudget gt false ? 'colourRow' : ''}"
+                             rowsPerPageTemplate="10,15,20"
                              >
                 
                     <p:column headerText="Id">
@@ -90,27 +73,19 @@
                     <p:column headerText="Points">
                         <h:outputText value="#{taskEntity.points}" />
                     </p:column>
-                    
-                    <p:column headerText="Points Completed">
-                        <h:outputText value="#{taskEntity.pointsCompleted}" />
-                    </p:column>
 
-                    <p:column headerText="Budget">
-                        <h:outputText value="#{taskEntity.taskBudget}">
-                            <f:convertNumber pattern="#0.00" />
-                        </h:outputText>
+                    <p:column headerText="Task Budget">
+                        <h:outputText value="#{taskEntity.taskBudget}" />
                     </p:column>
                     
-                    <p:column headerText="Budget Spent">
-                        <h:outputText value="#{taskEntity.spent}" >
-                            <f:convertNumber pattern="#0.00" />
-                        </h:outputText>
+                    <p:column headerText="Task Spent">
+                        <h:outputText value="#{taskEntity.spent}" />
                     </p:column>
                     
                     <p:column headerText="More Info">
-<!--                        <p:commandButton update="formViewTask" oncomplete="PF('dialogViewTask').show()" icon="ui-icon-document" title="View">
+                        <p:commandButton update="formViewTask" oncomplete="PF('dialogViewTask').show()" icon="ui-icon-document" title="View">
                             <f:setPropertyActionListener value="#{taskEntity}" target="#{projectManagedBean.taskEntityToView}" />
-                        </p:commandButton>-->
+                        </p:commandButton>
                         
                         <p:commandButton actionListener="#{projectManagedBean.doUpdateTask}" update="formUpdateProject" oncomplete="PF('dialogUpdateProject').show()" icon="ui-icon-pencil" title="Update">
                             <f:attribute name="taskEntityToUpdate" value="#{taskEntity}" />
@@ -152,34 +127,19 @@
                     
                     <p:row>
                         <p:column>
-                            <h:outputLabel value="Points Completed: " />
-                        </p:column>
-                        <p:column>
-                            <h:outputText value="#{projectManagedBean.taskEntityToView.pointsCompleted}" />
-                        </p:column>
-                    </p:row>
-                    
-                    <p:row>
-                        <p:column>
                             <h:outputLabel value="Budget: " />
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{projectManagedBean.taskEntityToView.taskBudget}" >
-                                <f:convertNumber type="number"
-                                 maxIntegerDigits="5"
-                                 maxFractionDigits="2"/>
-                            </h:outputText>
+                            <h:outputText value="#{projectManagedBean.taskEntityToView.taskBudget}" />
                         </p:column>
                     </p:row>
                     
                     <p:row>
                         <p:column>
-                            <h:outputLabel value="Budget Spent: " />
+                            <h:outputLabel value="Spent: " />
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{projectManagedBean.taskEntityToView.spent}">
-                                <f:convertNumber pattern="#0.00" />
-                            </h:outputText>
+                            <h:outputText value="#{projectManagedBean.taskEntityToView.spent}" />
                         </p:column>
                     </p:row>
                 </p:panelGrid>
@@ -222,7 +182,6 @@
                         </p:column>
                     </p:row>
                     
-                    
                     <p:row>
                         <p:column>
                             <p:outputLabel for="points" value="Points " />
@@ -237,19 +196,7 @@
                     
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="pointsCompleted" value="Points Completed" />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="pointsCompleted" value="#{projectManagedBean.taskEntityToUpdate.pointsCompleted}" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="pointsCompleted" />
-                        </p:column>
-                    </p:row>
-                    
-<!--                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="taskBudget" value="Budget " />
+                            <p:outputLabel for="taskBudget" value="Task Budget " />
                         </p:column>
                         <p:column>
                             <p:inputText id="taskBudget" value="#{projectManagedBean.taskEntityToUpdate.taskBudget}" required="true" requiredMessage="Task Budget is required" />
@@ -257,11 +204,11 @@
                         <p:column>
                             <p:message for="taskBudget" />
                         </p:column>
-                    </p:row>-->
+                    </p:row>
                     
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="spent" value="Amount Budget Spent " />
+                            <p:outputLabel for="spent" value="Amount Spent " />
                         </p:column>
                         <p:column>
                             <p:inputText id="spent" value="#{projectManagedBean.taskEntityToUpdate.spent}" required="true" requiredMessage="Amount Spent is required" />
@@ -273,7 +220,7 @@
                     
                     <p:row>
                         <p:column colspan="3">
-                            <p:commandButton value="Update Task" update="@form formAllTasks:projectProgressBar formAllTasks:dataTableAllTasks" actionListener="#{projectManagedBean.updateTask}" oncomplete="PF('dialogUpdateProject').show();" />
+                            <p:commandButton value="Update Product" update="@form formAllTasks:dataTableAllTasks" actionListener="#{projectManagedBean.updateTask}" oncomplete="PF('dialogUpdateProject').show();" />
                         </p:column>
                     </p:row>
                     

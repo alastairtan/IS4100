@@ -22,7 +22,7 @@ public interface TaskEntityControllerLocal {
 
     public TaskEntity retrieveTaskByTaskId(Long id);
 
-    public void updateTask(TaskEntity taskEntity);
+    public void updateTask(TaskEntity taskEntity, Long projectId);
 
     public void deleteTask(Long taskId);
     

@@ -15,10 +15,13 @@ import exception.UserNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.time.temporal.ChronoUnit;
+import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -65,6 +68,8 @@ public class ProjectManagedBean implements Serializable {
     private TaskEntity taskEntityToCreate;
     
     private TaskEntity taskEntityToView;
+    private TaskEntity taskEntityToUpdate;
+    private Long taskProjId;
     
     private List<Date> multi;
     private List<Date> range;
@@ -133,6 +138,13 @@ public class ProjectManagedBean implements Serializable {
         
         
         newProjectEntity.setUserEntity(ue);
+        int numOfDaysInBetween = (int)((newProjectEntity.getEndDate().getTime() - newProjectEntity.getStartDate().getTime())/(1000*60*60*24));
+        System.out.println("numOfDaysInBetween" + numOfDaysInBetween);
+        newProjectEntity.setTotalDays(numOfDaysInBetween);
+        int dayPassed = (int)((newProjectEntity.getEndDate().getTime() - newProjectEntity.getCurrentDate().getTime())/(1000*60*60*24)); 
+        newProjectEntity.setDaysPassed(dayPassed);
+        
+        
         ProjectEntity pe = projectEntityControllerLocal.createNewProject(newProjectEntity);
         
         newProjectEntity = new ProjectEntity();
@@ -169,7 +181,52 @@ public class ProjectManagedBean implements Serializable {
         taskEntityToCreate.setCompleted(false);
         taskEntityToCreate.setSpent(BigDecimal.ZERO);
         
+        double percentage = taskEntityToCreate.getPoints()/projectEntityToView.getTotalPoints();
+        
+        BigDecimal p = new BigDecimal(percentage, MathContext.DECIMAL64);
+        MathContext m = new MathContext(2);
+        BigDecimal taskB = projectEntityToView.getBudget().multiply(p).round(m);
+        
+        taskEntityToCreate.setTaskBudget(taskB);
+        
         TaskEntity te = taskEntityControllerLocal.createNewTask(taskEntityToCreate,projectEntityToView.getProjectId());
+    }
+    
+    
+    public void doUpdateTask(ActionEvent event)
+    {
+        taskEntityToUpdate = (TaskEntity)event.getComponent().getAttributes().get("taskEntityToUpdate");
+        
+        taskProjId = taskEntityToUpdate.getProjectEntity().getProjectId();
+        
+    }
+    
+    public void updateTask(ActionEvent event) {
+        try {
+            double percentage = taskEntityToUpdate.getPoints()/projectEntityToView.getTotalPoints();
+            BigDecimal p = new BigDecimal(percentage, MathContext.DECIMAL64);
+            BigDecimal taskB = projectEntityToView.getBudget().multiply(p);
+        
+            taskEntityToUpdate.setTaskBudget(taskB);
+            
+//            double percentageCompleted = taskEntityToUpdate.getPointsCompleted()/projectEntityToView.getTotalPoints();
+//            BigDecimal p1 = new BigDecimal(percentageCompleted, MathContext.DECIMAL64);
+//            BigDecimal taskBudgetCompleted = projectEntityToView.getBudget().multiply(p1);
+//            
+//            taskEntityToUpdate.setSpent(taskBudgetCompleted);
+            
+            taskEntityControllerLocal.updateTask(taskEntityToUpdate, taskProjId);
+        } catch (Exception ex) {
+            
+        }
+    }
+    
+    public TaskEntity getTaskEntityToUpdate() {
+        return taskEntityToUpdate;
+    }
+
+    public void setTaskEntityToUpdate(TaskEntity taskEntityToUpdate) {
+        this.taskEntityToUpdate = taskEntityToUpdate;
     }
 
     

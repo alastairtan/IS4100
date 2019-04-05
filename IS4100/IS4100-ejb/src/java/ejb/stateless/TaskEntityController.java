@@ -7,6 +7,9 @@ package ejb.stateless;
 
 import entity.ProjectEntity;
 import entity.TaskEntity;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -58,7 +61,7 @@ public class TaskEntityController implements TaskEntityControllerLocal {
     }
     
     @Override
-    public void updateTask(TaskEntity taskEntity) {
+    public void updateTask(TaskEntity taskEntity, Long projectId) {
         if(taskEntity != null) {
             TaskEntity taskEntityToUpdate = retrieveTaskByTaskId(taskEntity.getTaskId());
             
@@ -68,8 +71,60 @@ public class TaskEntityController implements TaskEntityControllerLocal {
                     taskEntityToUpdate.setTaskBudget(taskEntity.getTaskBudget());
                     taskEntityToUpdate.setSpent(taskEntity.getSpent());
                     taskEntityToUpdate.setPoints(taskEntity.getPoints());
+                    taskEntityToUpdate.setPointsCompleted(taskEntity.getPointsCompleted());
+                    
+                    ProjectEntity pe = projectEntityControllerLocal.retrieveProjectByProjectId(projectId);
+                    BigDecimal a = BigDecimal.ZERO;
+                    double totalPoints = 0;
+                    double percentageTotalPoints = 0;
                     
                     
+                    List<TaskEntity> taskEntitys = pe.getTaskEntitys();
+                    
+                    for(TaskEntity t : taskEntitys) {
+                        if(t.getTaskId().equals(taskEntityToUpdate.getTaskId())) {
+                            t = taskEntityToUpdate;
+                          
+                        }
+                        a = a.add(t.getSpent());
+                        totalPoints += t.getPointsCompleted();
+                        percentageTotalPoints += t.getPointsCompleted();
+                        
+                        
+                        
+                    }
+                    System.out.println(a);
+                    System.out.println("percentageTotalPoints" + percentageTotalPoints + " pe.getTotalPoints" + pe.getTotalPoints());
+                    double percentageT = (percentageTotalPoints/pe.getTotalPoints()) *100;
+                    System.out.println("percentageT= " + percentageT);
+                    pe.setPointsPercentageCompleted(percentageT);
+                    pe.setCurrentSpent(a);
+                    pe.setPointsCompleted(totalPoints);
+                    
+                    double totalAmtSpent = a.divide(pe.getBudget()).doubleValue() * 100;
+                    System.out.println("totalAmtSpent" +totalAmtSpent);
+                    pe.setPercentageBudgetSpent(totalAmtSpent);
+                    double forSpi = pe.getPointsPercentageCompleted()/totalAmtSpent;
+                    pe.setCpi(forSpi);
+                    MathContext m = new MathContext(2);
+                    BigDecimal taskBudget = taskEntityToUpdate.getTaskBudget().round(m);
+                    System.out.println("getSpent = " + taskEntityToUpdate.getSpent() + "getTaskBudget = " + taskBudget);
+                    if(taskEntityToUpdate.getSpent().compareTo(taskBudget) == 1 ) {
+                        taskEntityToUpdate.setIsOverBudget(true);
+                        System.out.println("true");
+                    }
+                    pe.setCurrentDate(new Date());
+                    Date curr = new Date();
+                    int dayPassed = (int)((curr.getTime() - pe.getCurrentDate().getTime())/(1000*60*60*24)); 
+                    dayPassed = 3; // NEED TO EDIT MANUALLY
+                    pe.setDaysPassed(dayPassed);
+                    
+                    int remainingPoints =(int) (pe.getTotalPoints()-pe.getPointsCompleted());
+                    System.out.println("remainingPoints" + remainingPoints);
+                    int remainingSprints =  (int)(remainingPoints /(pe.getPointsCompleted()/dayPassed));
+                    System.out.println("remainingSprints" + remainingSprints);
+                    pe.setRemainingSprints((int) (remainingSprints/7) );
+                    System.out.println("remainingSprints" + (int) (remainingSprints/7));
                 }
         }
     }

@@ -33,6 +33,10 @@
                     <p:inputText style="width: 80%"  value="#{projectManagedBean.newProjectEntity.budget}" />
                     <p:column>&nbsp;</p:column>
                     
+                    <h:outputLabel style="font-weight: bold" value="Total Points Assigned To Project: " />
+                    <p:inputText style="width: 80%"  value="#{projectManagedBean.newProjectEntity.totalPoints}" />
+                    <p:column>&nbsp;</p:column>
+                    
                     <h:inputHidden value="currentUserEntity" >
                         <f:attribute name="userId" value="#{projectManagedBean.userId}"/>
                     </h:inputHidden>
