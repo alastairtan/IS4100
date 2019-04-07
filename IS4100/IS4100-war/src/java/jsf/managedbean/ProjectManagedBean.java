@@ -144,7 +144,7 @@ public class ProjectManagedBean implements Serializable {
         int dayPassed = (int)((newProjectEntity.getEndDate().getTime() - newProjectEntity.getCurrentDate().getTime())/(1000*60*60*24)); 
         newProjectEntity.setDaysPassed(dayPassed);
         
-        
+        newProjectEntity.setProjectedBudgetAmount(newProjectEntity.getBudget());
         ProjectEntity pe = projectEntityControllerLocal.createNewProject(newProjectEntity);
         
         newProjectEntity = new ProjectEntity();
@@ -215,7 +215,7 @@ public class ProjectManagedBean implements Serializable {
 //            
 //            taskEntityToUpdate.setSpent(taskBudgetCompleted);
             
-            taskEntityControllerLocal.updateTask(taskEntityToUpdate, taskProjId);
+            taskEntityControllerLocal.updateTask(taskEntityToUpdate, taskProjId, false);
         } catch (Exception ex) {
             
         }

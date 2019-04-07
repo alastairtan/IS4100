@@ -46,6 +46,9 @@ public class ProjectEntity implements Serializable {
     private Date currentDate;
     private int remainingSprints;
     
+    private BigDecimal projectedBudgetAmount;
+    private boolean isInitial;
+    
     public ProjectEntity() {
         budget = BigDecimal.ZERO;
         currentSpent = BigDecimal.ZERO;
@@ -59,6 +62,8 @@ public class ProjectEntity implements Serializable {
         totalDays = 0;
         currentDate = new Date();
         remainingSprints = 0;
+        projectedBudgetAmount = BigDecimal.ZERO;
+        isInitial = true;
     }
     
     @OneToMany(mappedBy = "projectEntity")
@@ -69,6 +74,26 @@ public class ProjectEntity implements Serializable {
 
     public double getTotalPoints() {
         return totalPoints;
+    }
+
+    public BigDecimal getProjectedBudgetAmount() {
+        return projectedBudgetAmount;
+    }
+
+    public void setProjectedBudgetAmount(BigDecimal projectedBudgetAmount) {
+        this.projectedBudgetAmount = projectedBudgetAmount;
+    }
+    
+    public void addProjectedBudgetAmount(BigDecimal projected) {
+        this.projectedBudgetAmount = this.projectedBudgetAmount.add(projected);
+    }
+    
+    public boolean isIsInitial() {
+        return isInitial;
+    }
+
+    public void setIsInitial(boolean isInitial) {
+        this.isInitial = isInitial;
     }
 
     public int getTotalDays() {

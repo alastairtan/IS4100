@@ -38,6 +38,7 @@ public class TaskEntity implements Serializable {
     private double pointsCompleted;
 
     private boolean isOverBudget;
+    private String name;
     
     @ManyToOne
     private ProjectEntity projectEntity;
@@ -48,6 +49,7 @@ public class TaskEntity implements Serializable {
         pointsCompleted = 0;
         points = 0;
         isOverBudget = false;
+        
     }
 
     public boolean isIsOverBudget() {
@@ -56,6 +58,14 @@ public class TaskEntity implements Serializable {
 
     public void setIsOverBudget(boolean isOverBudget) {
         this.isOverBudget = isOverBudget;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isCompleted() {

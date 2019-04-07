@@ -8,6 +8,7 @@ package ejb.stateless;
 import entity.ProjectEntity;
 import entity.TaskEntity;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.Date;
 import java.util.List;
@@ -34,12 +35,17 @@ public class TaskEntityController implements TaskEntityControllerLocal {
     public TaskEntity createNewTask(TaskEntity taskEntity, Long projectId) {
         
         ProjectEntity pe = projectEntityControllerLocal.retrieveProjectByProjectId(projectId);
+        
         taskEntity.setProjectEntity(pe);
         em.persist(taskEntity);
         em.flush();
         pe.getTaskEntitys().add(taskEntity);
         em.persist(pe);
         em.flush();
+        if(!pe.isIsInitial()) {
+            updateTask(taskEntity, projectId,true);
+        }
+        
         return taskEntity;
     }
     
@@ -61,14 +67,14 @@ public class TaskEntityController implements TaskEntityControllerLocal {
     }
     
     @Override
-    public void updateTask(TaskEntity taskEntity, Long projectId) {
+    public void updateTask(TaskEntity taskEntity, Long projectId, boolean create) {
         if(taskEntity != null) {
             TaskEntity taskEntityToUpdate = retrieveTaskByTaskId(taskEntity.getTaskId());
             
             if(taskEntityToUpdate.getTaskId().equals(taskEntity.getTaskId()))
                 {
                     taskEntityToUpdate.setCompleted(taskEntity.isCompleted());
-                    taskEntityToUpdate.setTaskBudget(taskEntity.getTaskBudget());
+                    //taskEntityToUpdate.setTaskBudget(taskEntity.getTaskBudget());
                     taskEntityToUpdate.setSpent(taskEntity.getSpent());
                     taskEntityToUpdate.setPoints(taskEntity.getPoints());
                     taskEntityToUpdate.setPointsCompleted(taskEntity.getPointsCompleted());
@@ -78,7 +84,9 @@ public class TaskEntityController implements TaskEntityControllerLocal {
                     double totalPoints = 0;
                     double percentageTotalPoints = 0;
                     
+                    double projectTotalPoints = 0;
                     
+                    BigDecimal projectedBudget = BigDecimal.ZERO;
                     List<TaskEntity> taskEntitys = pe.getTaskEntitys();
                     
                     for(TaskEntity t : taskEntitys) {
@@ -89,10 +97,15 @@ public class TaskEntityController implements TaskEntityControllerLocal {
                         a = a.add(t.getSpent());
                         totalPoints += t.getPointsCompleted();
                         percentageTotalPoints += t.getPointsCompleted();
-                        
-                        
+                        projectTotalPoints += t.getPoints();
+                        projectedBudget = projectedBudget.add(t.getTaskBudget());
                         
                     }
+                    if(create) {
+                        pe.addProjectedBudgetAmount(taskEntity.getTaskBudget());
+                    }
+                    //pe.setProjectedBudgetAmount(projectedBudget);
+                    pe.setTotalPoints(projectTotalPoints);
                     System.out.println(a);
                     System.out.println("percentageTotalPoints" + percentageTotalPoints + " pe.getTotalPoints" + pe.getTotalPoints());
                     double percentageT = (percentageTotalPoints/pe.getTotalPoints()) *100;
@@ -111,7 +124,11 @@ public class TaskEntityController implements TaskEntityControllerLocal {
                     System.out.println("getSpent = " + taskEntityToUpdate.getSpent() + "getTaskBudget = " + taskBudget);
                     if(taskEntityToUpdate.getSpent().compareTo(taskBudget) == 1 ) {
                         taskEntityToUpdate.setIsOverBudget(true);
+                        BigDecimal asdf = taskEntityToUpdate.getSpent().subtract(taskBudget);
+                        pe.setProjectedBudgetAmount(pe.getProjectedBudgetAmount().add(asdf));
                         System.out.println("true");
+                    } else {
+                        taskEntityToUpdate.setIsOverBudget(false);
                     }
                     pe.setCurrentDate(new Date());
                     Date curr = new Date();
@@ -123,8 +140,9 @@ public class TaskEntityController implements TaskEntityControllerLocal {
                     System.out.println("remainingPoints" + remainingPoints);
                     int remainingSprints =  (int)(remainingPoints /(pe.getPointsCompleted()/dayPassed));
                     System.out.println("remainingSprints" + remainingSprints);
-                    pe.setRemainingSprints((int) (remainingSprints/7) );
+                    pe.setRemainingSprints((int) (Math.ceil(remainingSprints/14.0)) );
                     System.out.println("remainingSprints" + (int) (remainingSprints/7));
+                    pe.setIsInitial(false);
                 }
         }
     }
