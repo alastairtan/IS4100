@@ -69,21 +69,29 @@
                                 <h3>Project Progress Bar</h3>
                                 <p:progressBar id="projectProgressBar" value="#{projectManagedBean.projectEntityToView.pointsPercentageCompleted}" labelTemplate="{value}%" displayOnly="true"/>
                                 <h3>Project Budget Bar</h3>
-                                <p:progressBar id="projectBudgetBar" value="#{projectManagedBean.projectEntityToView.percentageBudgetSpent}" labelTemplate="{value}%" displayOnly="true"/>
-                                <h3>CPI</h3>
-                                <p:outputLabel value="#{projectManagedBean.projectEntityToView.cpi}">
-                                    <f:convertNumber pattern="#0.00" />
-                                </p:outputLabel>
-                                    
+                                <p:progressBar id="projectBudgetBar" value="#{projectManagedBean.projectEntityToView.percentageBudgetSpent}" labelTemplate="{value}%" displayOnly="true" style="flex-grow: 0;"  />
+                                <div class="ui-g-3 ui-md-4">
+                                    <h3>CPI</h3>
+                                    <p:outputLabel value="#{projectManagedBean.projectEntityToView.cpi}">
+                                        <f:convertNumber pattern="#0.00" />
+                                    </p:outputLabel>
+                                </div>
+                                <div class="ui-g-3 ui-md-8">
+                                    <h3>Remaining Sprints</h3>
+                                    <p:outputLabel value="#{projectManagedBean.projectEntityToView.remainingSprints}"/>
+                                </div>
+                                
+                                
+                                
                             </div>
                             <div class="ui-g-3 ui-md-6">
                                 <h3>Project Estimated Budget Bar</h3>
                                 $<p:outputLabel value="#{projectManagedBean.projectEntityToView.projectedBudgetAmount}">
                                     <f:convertNumber pattern="#0.00" />
                                 </p:outputLabel>
-                                <h3>Remaining Sprints</h3>
-                                <p:outputLabel value="#{projectManagedBean.projectEntityToView.remainingSprints}"/>
+                                
                             </div>
+                            
                             
                         </div>
                     </div>
