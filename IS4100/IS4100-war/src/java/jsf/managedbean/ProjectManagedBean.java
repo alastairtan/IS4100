@@ -110,7 +110,12 @@ public class ProjectManagedBean implements Serializable {
     public void postConstruct()
     {
         try {
-            projectId = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("thisProjId");
+            //projectId = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("thisProjId");
+            //projectEntityToView = projectEntityControllerLocal.retrieveProjectByProjectId(projectId);
+            System.out.println("long.value of " +projectId);
+            projectId = Long.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("projectId"));
+            
+            System.out.println("long.value of " +projectId);
             projectEntityToView = projectEntityControllerLocal.retrieveProjectByProjectId(projectId);
         } catch(Exception ex) {
             

@@ -63,10 +63,12 @@
      
                     
                     <p:column headerText="More Info">
-                        <p:commandButton icon="fa fa-fw fa-edit" title="View Project Details" action="#{projectManagedBean.navigate('viewCurrentProject', projectEntity.projectId)}">
-                            <f:param name="projectEntityToView" value="#{projectManagedBean.projectEntityToView}"/>
-                        </p:commandButton>
-                        
+<!--                        <p:commandButton icon="fa fa-fw fa-edit" title="View Project Details" action="viewCurrentProject?faces-redirect=true">
+                            <f:param name="projectId" value="#{projectEntity.projectId}"/>
+                        </p:commandButton>-->
+                        <p:link outcome="viewCurrentProject" value="View Project">
+                            <f:param name="projectId" value="#{projectEntity.projectId}"/>
+                        </p:link>
                         
                     
 <!--                        <p:commandButton update="formViewProject" oncomplete="PF('dialogViewProject').show()" icon="ui-icon-document" title="View">
